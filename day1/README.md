@@ -41,7 +41,7 @@ Log
 모든 aws API 요청들에 대해 신뢰성 있는 기록을 수행. (누가 언제 어디서 무엇을 결과 형태로)
 
 90일간의 이력 조회는 무료
-s3나 cloudwatch에 전달하는 서비스는 무료
+s3나 cloudwatch에 전달하는 서비스는 유료
 
 #### AWS CloudWatch
 aws 리소스, 앱에 대한 모니터링
