@@ -49,12 +49,103 @@ aws 리소스, 앱에 대한 모니터링
 
 VPC
 ---
+amazon virtual private cloud. 사용자가 정의한 가상 네트워크로 aws 리소스를 시작한다.
+
+#### 자원 레벨
+![자원 레벨](./image/network_resource.png)
+
+#### VPC 구성하기
+- 리전 >> AZ(가용 영역) >> public 서브넷, private 서브넷  
+
+예) 서울 리전, ap-northeast-2a (public 1, private 1), ap-northeast-2c (public1, private1)
+
+- `라우팅 테이블`  
+VPC와 함께 자동으로 제공되는 라우팅 테이블. 모든 서브넷의 라우팅 제어함.
+
+- `NACL` (network access congtrol list)  
+서브넷 단위로 적용되는 stateless(inbound / outbound 모두 필터링) `방화벽`. rule 번호가 낮은 우선순위로 적용된다. 
+
+- `Security Group`  
+인스턴스 단위로 적용되는 stateful(요청 정보를 저장해 outbound 트래픽 제어는 하지 않는다.) `방화벽`  
+같은 서브넷 간 통신 : Security group  
+다른 서브넷 간 통신 : NACL -> Security group  
+
+- `IGW`  
+vpc와 인터넷 간에 통신할 수 있게 해준다. public ip를 가진 public 서브넷에 위치한 리소스인 경우 인터넷 게이트 웨이를 통해 외부 인터넷과 통신 가능.
+
+- `NAT gateway`  
+private 인스턴스도 public 서브넷에 위치한 NAT gateway를 통하면 인터넷 통신 가능.
+
+#### vpc best practice
+- 기본으로 제공되는 default vpc 대신, vpc를 새로 구성하는 것을 권장.  
+- ip 대역 설정 -> 16 ~ 28 넷마스크 허용하고 있음. rfc1918에서 정의하는 사설 ip 영역대로 설정할 것.  
+- 적절한 서브네팅 -> 라우팅 그룹이 커지면 라우팅에 부담이 되므로 계층적 구조로 쪼개서 관리할 것. 해당 서브넷의 용도및 몇대의 서버를 배치할 것인지 계획 후 설정하기. 
+- public 서브넷에는 최소의 서버만 배치해서 인터넷 노출을 최소화 할 것.  
+
+![vpc 서브네팅](./image/vpc_subnetting.png)
+
+#### vpc 엔드포인트 타입
+aws 서비스와의 연계를 위한. (같은 aws 내부의 통신일 경우 vpc 바깥에 있다고 해도 굳이 외부 인터네슬 통할 필요가 없음. 보안강화, 비용절감 차원)
+- 게이트웨이 엔드포인트 : s3, 다이나모 db만 지원
+- 인터페이스 엔드포인트 (private link) : 그 이외
+
+#### vpc끼리 연걸하기
+- vpc peering: 1:1 연결
+- Transit gateway : 다수 vpc 연결 간소화
+
+#### 온프레미스, 데이터 센터와의 연결
+- vpn 이나 direct connect (DX)
 
 Computing
 ---------
+#### EC2
+인스턴스 표기법
+
+인스턴스 세대 -> 최신 세대로 사용하는 것이 가장 좋음.  
+인스턴스 크기 -> large: 2cpu, xlarge: 4cpu
+
+![ec2_instance](./image/ec2_instance.png)
+![ec2 family](./image/ec2_family.png)
+
+#### ELB
+어플리케이션 트래픽을 EC2, 컨테이너, IP, lambda와 같은 여러 대상에 자동으로 분산.  
+`ALB` -> layer 7, http, https  
+`NLB` -> layer 4, tcp, udp, tls  
+`CLB` -> deprecated  
+
+#### serverless
+- aws lambda
+  ```
+    # 진입점. 이벤트가 함수 트리거
+    def lambda_handler(event, context):
+  ```
+- aws fargate
 
 Storage
 -------
+#### EC2의 블록 스토리지 옵션
+로컬 인스턴스 스토어 (인스턴스 종료시 휘발됨) vs EBS (원격 스토리지 호스트 머신)
+
+#### IOPS, throughput
+`IOPS` -> Input/output operations / second. 저장장치 속도 측정 단위. db read, write 트랜잭션 속도 가늠에 유용한 지수. 작은거 여러번  
+`throughput` -> Data transfer in megabytes / second. 하둡, 카프카 스트리밍 같은 고용량의 데이터 프로세싱이 들어갈 때 유용한 지수.  
+
+![ebs volume type](./image/ebs_volumne_type.png)
+gp -> general purpose
+
+무중단으로 볼륨 타입변경, 크기 변경 가능하다.
+
+#### RDS
+aws 관리형 RDS 서비스 사용하면 쉽게 HA 구성 가능. (Writer 와 다수의 Reader를 여러 AZ에 분산.)
+
+master에서 read로 데이터 복제 비동기식으로 진행됨. binlog data
+장애 발생시 빠르게 read를 writer로 승격.
+
+자동 백업. 스냅샷 (5분마다 데이터베이스 트랜잭션 로그를 백업)
+증분식으로 변경분만 백업
+
+#### s3
+
 
 비용 절감
 -------
