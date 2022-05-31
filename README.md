@@ -12,6 +12,11 @@ DAY1
 
 DAY2
 ----
+[day2 👈](./day2)
+- aws basic 
+- serverless
+- CI/CD
+
 
 DAY3
 ----
