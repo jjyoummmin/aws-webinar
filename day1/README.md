@@ -51,6 +51,8 @@ VPC
 ---
 amazon virtual private cloud. 사용자가 정의한 가상 네트워크로 aws 리소스를 시작한다.
 
+[aws 네트워킹 기초 강의](https://www.youtube.com/watch?v=hiKPPy584Mg)  
+
 #### 자원 레벨
 ![자원 레벨](./image/network_resource.png)
 
@@ -60,15 +62,16 @@ amazon virtual private cloud. 사용자가 정의한 가상 네트워크로 aws 
 예) 서울 리전, ap-northeast-2a (public 1, private 1), ap-northeast-2c (public1, private1)
 
 - `라우팅 테이블`  
-VPC와 함께 자동으로 제공되는 라우팅 테이블. 모든 서브넷의 라우팅 제어함.
+VPC와 함께 자동으로 제공되는 라우팅 테이블. default route table이 제공되지만, 서브넷 마다 다른 routing table을 assign할 수도 있음.
 
 - `NACL` (network access congtrol list)  
 서브넷 단위로 적용되는 stateless(inbound / outbound 모두 필터링) `방화벽`. rule 번호가 낮은 우선순위로 적용된다. 
+stateless의 의미 = 한방향의 트래픽을 허용했다고, 그 반대 방향의 트래픽이 허용된 것이 아님. 고로  inbound, outbound rule을 모두 명시적으로 정의해야함
+아주 **coarse-grain** 한 decision에만 사용되어야 함. NACL에 길고 복잡한 rule을 적용하지 말것.
 
 - `Security Group`  
-인스턴스 단위로 적용되는 stateful(요청 정보를 저장해 outbound 트래픽 제어는 하지 않는다.) `방화벽`  
-같은 서브넷 간 통신 : Security group  
-다른 서브넷 간 통신 : NACL -> Security group  
+인스턴스 단위로 적용되는 stateful(요청 정보를 저장해 outbound 트래픽 제어는 하지 않는다.) `방화벽`   
+stateful의 의미 = request가 올때 자동으로 반대 방향의 response에 대한 permission도 세팅해주므로 inbound rule만 정의하면 된다.
 
 - `IGW`  
 vpc와 인터넷 간에 통신할 수 있게 해준다. public ip를 가진 public 서브넷에 위치한 리소스인 경우 인터넷 게이트 웨이를 통해 외부 인터넷과 통신 가능.
@@ -94,7 +97,7 @@ aws 서비스와의 연계를 위한. (같은 aws 내부의 통신일 경우 vpc
 - Transit gateway : 다수 vpc 연결 간소화
 
 #### 온프레미스, 데이터 센터와의 연결
-- vpn 이나 direct connect (DX)
+- vpn 이나 direct connect
 
 Computing
 ---------
