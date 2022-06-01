@@ -71,7 +71,7 @@ serverless 배달 주문 서비스 만들기 실습
 }
 ```
 
-(3) 주문 rule에 타겟2로 SQS 연겷해서 람다가 주문 처리하게 하기.
+(3) 주문 rule에 타겟2로 SQS 연결해서 람다가 주문 처리하게 하기.
 
 (4) api gateway와 eventbridge 연결하기
 - 위에서 api gateway와 SQS를 바로 연결했던 것을 끊는다.
