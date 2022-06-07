@@ -66,7 +66,7 @@ VPC와 함께 자동으로 제공되는 라우팅 테이블. default route table
 
 - `NACL` (network access congtrol list)  
 서브넷 단위로 적용되는 stateless(inbound / outbound 모두 필터링) `방화벽`. rule 번호가 낮은 우선순위로 적용된다. 
-stateless의 의미 = 한방향의 트래픽을 허용했다고, 그 반대 방향의 트래픽이 허용된 것이 아님. 고로  inbound, outbound rule을 모두 명시적으로 정의해야함
+stateless의 의미 = 한방향의 트래픽을 허용했다고, 그 반대 방향의 트래픽이 허용된 것이 아님. 고로  inbound, outbound rule을 모두 명시적으로 정의해야함  
 아주 **coarse-grain** 한 decision에만 사용되어야 함. NACL에 길고 복잡한 rule을 적용하지 말것.
 
 - `Security Group`  

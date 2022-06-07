@@ -20,5 +20,10 @@ DAY2
 
 DAY3
 ----
+[day3 👈](./day3)
+- container
+- observability (모니터링)
+- amplify
+- CDK
 
 
