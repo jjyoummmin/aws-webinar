@@ -1,5 +1,7 @@
 CDK 실습
 =======
+[cdk 실습 카탈로그](https://cdk-korean-v1.d3teb0b13vz8ds.amplifyapp.com/)  
+
 ![cdk app](./image/cdk_app.png)
 
 로컬에서 본인에게 익숙한 프로그래밍 언어 (ts, js, c#, java, python, go)로 aws 리소스를 정의 -> cloudFormation stack 으로 변환하고 배포 -> aws에 리소스 프로비저닝됨
